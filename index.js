@@ -1,8 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
+const readline = require('readline');
 const app = express();
 const port = 3000;
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -22,13 +28,19 @@ connection.connect((err) => {
   connection.query('SELECT 1 + 1 AS solution', (error, results, fields) => {
     if (error) throw error;
     console.log('The solution is: ', results[0].solution);
+
+    // Pausar hasta que se presione una tecla
+    rl.question('Press any key to continue...', (answer) => {
+      rl.close();
+
+      // Continuar con la ejecución del servidor
+      app.get('/', (req, res) => {
+        res.send('Hello World!');
+      });
+
+      app.listen(port, () => {
+        console.log(`Example app listening at http://localhost:${port}`);
+      });
+    });
   });
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
 });
