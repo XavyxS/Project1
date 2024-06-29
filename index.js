@@ -1,11 +1,13 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+const mysql = require('mysql');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Compac1984',
+  database: 'db_proj1'
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL!');
 });
