@@ -12,6 +12,7 @@ const saltRounds = 10;
 const secretKey = process.env.SECRET_KEY;
 
 app.use(bodyParser.json());
+app.use(express.static('public'));  // Servir archivos estáticos desde la carpeta public
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
