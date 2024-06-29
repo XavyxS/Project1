@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const app = express();
 const port = 3000;
 
@@ -12,8 +12,17 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL!');
+  if (err) {
+    console.error('Error connecting to MySQL:', err.stack);
+    return;
+  }
+  console.log('Connected to MySQL as id ' + connection.threadId);
+
+  // Verificar la conexión con una consulta simple
+  connection.query('SELECT 1 + 1 AS solution', (error, results, fields) => {
+    if (error) throw error;
+    console.log('The solution is: ', results[0].solution);
+  });
 });
 
 app.get('/', (req, res) => {
